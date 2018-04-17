@@ -89,7 +89,7 @@ func (t *SlackRecvTrigger) Start() error {
 
 			case *slack.InvalidAuthEvent:
 				log.Debug("Invalid credentials")
-				return
+				return nil
 
 			default:
 
