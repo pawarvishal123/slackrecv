@@ -58,7 +58,6 @@ func (t *SlackRecvTrigger) Start() error {
 
 		accessToken := handler.GetStringSetting("AccessToken")
 		log.Debug("AccessToken: ", accessToken)
-		//xoxp-347454898887-346174390068-349018862054-d03ad685bb6a0c7a96a7873f570f26e4
 		api := slack.New(accessToken)
 		//logger := log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)
 		//slack.SetLogger(logger)
