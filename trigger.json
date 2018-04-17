@@ -1,0 +1,30 @@
+{
+  "name": "slackrecv",
+  "type": "flogo:trigger",
+  "ref": "https://github.com/pawarvishal123/slackrecv",
+  "version": "0.0.1",
+  "title": "Receive Slack RTM Messages",
+  "author": "Vishal Pawar <vpawar@tibco.com>",
+  "description": "Slack RTM Message Receiver Trigger",
+  "settings":[
+    {
+      "name": "AccessToken",
+      "type": "string",
+	  "required":"true"
+    },
+    {
+      "name": "Channel",
+      "type": "string",
+	  "required":"true"
+    }
+  ],
+  "output": [
+    {
+      "name": "message",
+      "type": "string"
+    }
+  ],
+  "handler": {
+    "settings": []
+  }
+}
