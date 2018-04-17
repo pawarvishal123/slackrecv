@@ -117,7 +117,7 @@ func (t *SlackRecvTrigger) RunHandler(handler *trigger.Handler, payload string) 
 	trgData := make(map[string]interface{})
 	trgData["message"] = payload
 
-	results, err := handler.Handle(context.Background(), trgData)
+	_, err := handler.Handle(context.Background(), trgData)
 
 	if err != nil {
 		log.Error("Error starting action: ", err.Error())
