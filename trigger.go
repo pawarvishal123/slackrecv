@@ -2,11 +2,6 @@ package slackrecv
 
 import (
 	"context"
-	"math"
-	"strconv"
-	"strings"
-	"time"
-
 	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/nlopes/slack"
@@ -80,8 +75,8 @@ func (t *SlackRecvTrigger) Start() error {
 				//rtm.SendMessage(rtm.NewOutgoingMessage("Hello world", "CA6BXNMPC"))
 
 			case *slack.MessageEvent:
-				log.Debug("Message: %v\n", ev)
-				t.RunHandler(handler, ev)
+				log.Debug("Message: %v\n", msg.Data)
+				t.RunHandler(handler, msg.Data)
 
 			case *slack.PresenceChangeEvent:
 				//fmt.Printf("Presence Change: %v\n", ev)
