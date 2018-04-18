@@ -3,6 +3,7 @@ package slackrecv
 import (
 	"context"
 	"log"
+	"os"
 	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/nlopes/slack"
@@ -64,7 +65,7 @@ func (t *SlackRecvTrigger) Start() error {
 		go rtm.ManageConnection()
 
 		for msg := range rtm.IncomingEvents {
-			log.Debugf("Event Received: ")
+			flogolog.Debugf("Event Received: ")
 			switch ev := msg.Data.(type) {
 			case *slack.HelloEvent:
 				// Ignore hello
@@ -122,7 +123,7 @@ func (t *SlackRecvTrigger) RunHandler(handler *trigger.Handler, payload string) 
 	_, err := handler.Handle(context.Background(), trgData)
 
 	if err != nil {
-		log.Error("Error starting action: ", err.Error())
+		flogolog.Error("Error starting action: ", err.Error())
 	}
 
 	flogolog.Debugf("Ran Handler: [%s]", handler)
