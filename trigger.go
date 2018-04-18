@@ -69,6 +69,7 @@ func (t *SlackRecvTrigger) Start() error {
 			flogolog.Debugf("Event Received: ")
 			switch ev := msg.Data.(type) {
 			case *slack.HelloEvent:
+				t.RunHandler(handler, "Hello!")
 				// Ignore hello
 				//fmt.Println("Hello")
 
