@@ -40,6 +40,7 @@ func (t *SlackRecvTrigger) Metadata() *trigger.Metadata {
 
 // Initialize implements trigger.Init
 func (t *SlackRecvTrigger) Initialize(ctx trigger.InitContext) error {
+	flogolog.Debugf("Initializing slack recv trigger...")
 	t.handlers = ctx.GetHandlers()
 	return nil
 }
