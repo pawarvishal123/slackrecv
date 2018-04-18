@@ -2,12 +2,13 @@ package slackrecv
 
 import (
 	"context"
+	"log"
 	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/nlopes/slack"
 )
 
-var log = logger.GetLogger("trigger-flogo-slackrecv")
+var flogolog = logger.GetLogger("trigger-flogo-slackrecv")
 
 // SlackRecvTrigger is Slack RTM message trigger
 type SlackRecvTrigger struct {
@@ -45,19 +46,19 @@ func (t *SlackRecvTrigger) Initialize(ctx trigger.InitContext) error {
 // Start implements ext.Trigger.Start
 func (t *SlackRecvTrigger) Start() error {
 
-	log.Debugf("Start")
+	flogolog.Debugf("Starting slack RTM..")
 	handlers := t.handlers
 
-	log.Debug("Processing handlers")
+	flogolog.Debug("Processing handlers")
 	for _, handler := range handlers {
 
-		//accessToken := handler.GetStringSetting("AccessToken")
-		accessToken := t.config.GetSetting("AccessToken")
-		log.Debug("AccessToken: ", accessToken)
+		accessToken := handler.GetStringSetting("AccessToken")
+		//accessToken := t.config.GetSetting("AccessToken")
+		flogolog.Debug("AccessToken: ", accessToken)
 		api := slack.New(accessToken)
-		//logger := log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)
-		//slack.SetLogger(logger)
-		//api.SetDebug(true)
+		logger := log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)
+		slack.SetLogger(logger)
+		api.SetDebug(true)
 
 		rtm := api.NewRTM()
 		go rtm.ManageConnection()
@@ -70,13 +71,13 @@ func (t *SlackRecvTrigger) Start() error {
 				//fmt.Println("Hello")
 
 			case *slack.ConnectedEvent:
-				log.Debugf("Infos:", ev.Info)
-				log.Debugf("Connection counter:", ev.ConnectionCount)
+				flogolog.Debugf("Infos:", ev.Info)
+				flogolog.Debugf("Connection counter:", ev.ConnectionCount)
 				// Replace C2147483705 with your Channel ID
 				//rtm.SendMessage(rtm.NewOutgoingMessage("Hello world", "CA6BXNMPC"))
 
 			case *slack.MessageEvent:
-				log.Debugf("Message: %v\n", msg.Data.(string))
+				flogolog.Debugf("Message: %v\n", msg.Data.(string))
 				t.RunHandler(handler, msg.Data.(string))
 
 			case *slack.PresenceChangeEvent:
@@ -86,10 +87,10 @@ func (t *SlackRecvTrigger) Start() error {
 				//fmt.Printf("Current latency: %v\n", ev.Value)
 
 			case *slack.RTMError:
-				log.Debugf("Error: %s\n", ev.Error())
+				flogolog.Debugf("Error: %s\n", ev.Error())
 
 			case *slack.InvalidAuthEvent:
-				log.Debugf("Invalid credentials")
+				flogolog.Debugf("Invalid credentials")
 				return nil
 
 			default:
@@ -107,7 +108,7 @@ func (t *SlackRecvTrigger) Start() error {
 // Stop implements ext.Trigger.Stop
 func (t *SlackRecvTrigger) Stop() error {
 
-	log.Debugf("Stopping RTM")
+	flogolog.Debugf("Stopping RTM")
 
 	return nil
 }
@@ -124,6 +125,6 @@ func (t *SlackRecvTrigger) RunHandler(handler *trigger.Handler, payload string) 
 		log.Error("Error starting action: ", err.Error())
 	}
 
-	log.Debugf("Ran Handler: [%s]", handler)
+	flogolog.Debugf("Ran Handler: [%s]", handler)
 	
 }

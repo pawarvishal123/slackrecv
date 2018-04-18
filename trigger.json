@@ -5,9 +5,15 @@
   "version": "0.0.1",
   "title": "Receive Slack RTM Messages",
   "author": "Vishal Pawar <vpawar@tibco.com>",
-  "description": "Slack RTM Message Receiver Trigger",
-  "settings":[
+  "description": "Slack RTM Message Trigger",
+  "output": [
     {
+      "name": "message",
+      "type": "string"
+    }
+  ],
+  "handler": {
+    "settings": [{
       "name": "AccessToken",
       "type": "string",
 	  "required":"true"
@@ -16,15 +22,6 @@
       "name": "Channel",
       "type": "string",
 	  "required":"true"
-    }
-  ],
-  "output": [
-    {
-      "name": "message",
-      "type": "string"
-    }
-  ],
-  "handler": {
-    "settings": []
+    }]
   }
 }
