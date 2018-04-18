@@ -45,13 +45,14 @@ func (t *SlackRecvTrigger) Initialize(ctx trigger.InitContext) error {
 // Start implements ext.Trigger.Start
 func (t *SlackRecvTrigger) Start() error {
 
-	log.Debug("Start")
+	log.Debugf("Start")
 	handlers := t.handlers
 
 	log.Debug("Processing handlers")
 	for _, handler := range handlers {
 
-		accessToken := handler.GetStringSetting("AccessToken")
+		//accessToken := handler.GetStringSetting("AccessToken")
+		accessToken := t.config.GetSetting("AccessToken").(string)
 		log.Debug("AccessToken: ", accessToken)
 		api := slack.New(accessToken)
 		//logger := log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)
@@ -62,20 +63,20 @@ func (t *SlackRecvTrigger) Start() error {
 		go rtm.ManageConnection()
 
 		for msg := range rtm.IncomingEvents {
-			log.Debug("Event Received: ")
+			log.Debugf("Event Received: ")
 			switch ev := msg.Data.(type) {
 			case *slack.HelloEvent:
 				// Ignore hello
 				//fmt.Println("Hello")
 
 			case *slack.ConnectedEvent:
-				log.Debug("Infos:", ev.Info)
-				log.Debug("Connection counter:", ev.ConnectionCount)
+				log.Debugf("Infos:", ev.Info)
+				log.Debugf("Connection counter:", ev.ConnectionCount)
 				// Replace C2147483705 with your Channel ID
 				//rtm.SendMessage(rtm.NewOutgoingMessage("Hello world", "CA6BXNMPC"))
 
 			case *slack.MessageEvent:
-				log.Debug("Message: %v\n", msg.Data.(string))
+				log.Debugf("Message: %v\n", msg.Data.(string))
 				t.RunHandler(handler, msg.Data.(string))
 
 			case *slack.PresenceChangeEvent:
@@ -85,10 +86,10 @@ func (t *SlackRecvTrigger) Start() error {
 				//fmt.Printf("Current latency: %v\n", ev.Value)
 
 			case *slack.RTMError:
-				log.Debug("Error: %s\n", ev.Error())
+				log.Debugf("Error: %s\n", ev.Error())
 
 			case *slack.InvalidAuthEvent:
-				log.Debug("Invalid credentials")
+				log.Debugf("Invalid credentials")
 				return nil
 
 			default:
@@ -97,7 +98,7 @@ func (t *SlackRecvTrigger) Start() error {
 				// fmt.Printf("Unexpected: %v\n", msg.Data)
 			}
 		}
-		//log.Debugf("Processing Handler: %s", handler.ActionId)
+		log.Debugf("Processing Handler: %s", handler.ActionId)
 	}
 
 	return nil
@@ -106,7 +107,7 @@ func (t *SlackRecvTrigger) Start() error {
 // Stop implements ext.Trigger.Stop
 func (t *SlackRecvTrigger) Stop() error {
 
-	log.Debug("Stopping RTM")
+	log.Debugf("Stopping RTM")
 
 	return nil
 }
@@ -124,4 +125,5 @@ func (t *SlackRecvTrigger) RunHandler(handler *trigger.Handler, payload string) 
 	}
 
 	log.Debugf("Ran Handler: [%s]", handler)
+	
 }
