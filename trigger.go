@@ -52,7 +52,7 @@ func (t *SlackRecvTrigger) Start() error {
 	for _, handler := range handlers {
 
 		//accessToken := handler.GetStringSetting("AccessToken")
-		accessToken := t.config.GetSetting("AccessToken").(string)
+		accessToken := t.config.GetSetting("AccessToken")
 		log.Debug("AccessToken: ", accessToken)
 		api := slack.New(accessToken)
 		//logger := log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)
@@ -98,7 +98,7 @@ func (t *SlackRecvTrigger) Start() error {
 				// fmt.Printf("Unexpected: %v\n", msg.Data)
 			}
 		}
-		log.Debugf("Processing Handler: %s", handler.ActionId)
+		//log.Debugf("Processing Handler: %s", handler.ActionId)
 	}
 
 	return nil
