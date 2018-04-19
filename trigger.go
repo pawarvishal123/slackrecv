@@ -80,7 +80,7 @@ func (t *SlackRecvTrigger) Start() error {
 				//rtm.SendMessage(rtm.NewOutgoingMessage("Hello world", "CA6BXNMPC"))
 
 			case *slack.MessageEvent:
-				flogolog.Debugf("Message: %v\n", msg.Data.(string))
+				flogolog.Debugf("Message: %v\n", ev)
 				t.RunHandler(handler, msg.Data.(string))
 
 			case *slack.PresenceChangeEvent:
