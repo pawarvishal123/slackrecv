@@ -11,6 +11,7 @@ import (
 )
 
 var flogolog = logger.GetLogger("trigger-flogo-slackrecv")
+var exitflag = 0
 
 // SlackRecvTrigger is Slack RTM message trigger
 type SlackRecvTrigger struct {
@@ -51,7 +52,7 @@ func (t *SlackRecvTrigger) Start() error {
 
 	flogolog.Debugf("Starting slack RTM..")
 	handlers := t.handlers
-
+	exitflag = 0
 	flogolog.Debug("Processing handlers")
 	for _, handler := range handlers {
 
@@ -68,6 +69,9 @@ func (t *SlackRecvTrigger) Start() error {
 
 		for msg := range rtm.IncomingEvents {
 			flogolog.Debugf("Event Received: ")
+			
+			if exitflag == 1
+				return nil
 			switch ev := msg.Data.(type) {
 			case *slack.HelloEvent:
 				t.RunHandler(handler, "Hello!")
@@ -111,7 +115,7 @@ func (t *SlackRecvTrigger) Start() error {
 
 // Stop implements ext.Trigger.Stop
 func (t *SlackRecvTrigger) Stop() error {
-
+	exitflag = 1
 	flogolog.Debugf("Stopping RTM")
 
 	return nil
