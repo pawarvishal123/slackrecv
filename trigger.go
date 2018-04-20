@@ -11,7 +11,6 @@ import (
 )
 
 var flogolog = logger.GetLogger("trigger-flogo-slackrecv")
-var exitflag = 0
 
 // SlackRecvTrigger is Slack RTM message trigger
 type SlackRecvTrigger struct {
@@ -50,15 +49,15 @@ func (t *SlackRecvTrigger) Initialize(ctx trigger.InitContext) error {
 // Start implements ext.Trigger.Start
 func (t *SlackRecvTrigger) Start() error {
 
-	flogolog.Debugf("Starting slack RTM..")
+	fmt.Printf("Starting slack RTM..")
 	handlers := t.handlers
-	exitflag := 0
+	
 	flogolog.Debug("Processing handlers")
 	for _, handler := range handlers {
 
 		accessToken := handler.GetStringSetting("AccessToken")
 		//accessToken := t.config.GetSetting("AccessToken")
-		flogolog.Debug("AccessToken: ", accessToken)
+		//flogolog.Debug("AccessToken: ", accessToken)
 		api := slack.New(accessToken)
 		logger := log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)
 		slack.SetLogger(logger)
@@ -70,12 +69,9 @@ func (t *SlackRecvTrigger) Start() error {
 		for msg := range rtm.IncomingEvents {
 			flogolog.Debugf("Event Received: ")
 			
-			if exitflag == 1 {
-				return nil
-			}
 			switch ev := msg.Data.(type) {
 			case *slack.HelloEvent:
-				t.RunHandler(handler, "Hello!")
+				//t.RunHandler(handler, "Hello!")
 				// Ignore hello
 				//fmt.Println("Hello")
 
@@ -116,8 +112,8 @@ func (t *SlackRecvTrigger) Start() error {
 
 // Stop implements ext.Trigger.Stop
 func (t *SlackRecvTrigger) Stop() error {
-	exitflag := 1
-	flogolog.Debugf("Stopping RTM...")
+	
+	fmt.Printf("Stopping RTM...")
 
 	return nil
 }
@@ -131,9 +127,9 @@ func (t *SlackRecvTrigger) RunHandler(handler *trigger.Handler, payload string) 
 	_, err := handler.Handle(context.Background(), trgData)
 
 	if err != nil {
-		flogolog.Error("Error starting action: ", err.Error())
+		fmt.Printf("Error starting action: ", err.Error())
 	}
 
-	flogolog.Debugf("Ran Handler: [%s]", handler)
+	fmt.Printf("Ran Handler: [%s]", handler)
 	
 }
