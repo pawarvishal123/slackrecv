@@ -82,7 +82,7 @@ func (t *SlackRecvTrigger) Start() error {
 
 			case *slack.MessageEvent:
 				fmt.Printf("Message: %v\n", ev)
-				t.RunHandler(handler, msg.Data.text)
+				t.RunHandler(handler, ev.Text)
 
 			case *slack.PresenceChangeEvent:
 				//fmt.Printf("Presence Change: %v\n", ev)
