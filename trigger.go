@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"os"
+	"fmt"
 	"github.com/TIBCOSoftware/flogo-lib/core/trigger"
 	"github.com/TIBCOSoftware/flogo-lib/logger"
 	"github.com/nlopes/slack"
