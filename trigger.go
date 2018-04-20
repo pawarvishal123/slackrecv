@@ -74,14 +74,14 @@ func (t *SlackRecvTrigger) Start() error {
 				//fmt.Println("Hello")
 
 			case *slack.ConnectedEvent:
-				flogolog.Debugf("Infos:", ev.Info)
-				flogolog.Debugf("Connection counter:", ev.ConnectionCount)
+				fmt.Printf("Infos:", ev.Info)
+				fmt.Printf("Connection counter:", ev.ConnectionCount)
 				// Replace C2147483705 with your Channel ID
 				//rtm.SendMessage(rtm.NewOutgoingMessage("Hello world", "CA6BXNMPC"))
 
 			case *slack.MessageEvent:
-				flogolog.Debugf("Message: %v\n", ev)
-				t.RunHandler(handler, msg.Data.(string))
+				fmt.Printf("Message: %v\n", ev)
+				t.RunHandler(handler, msg.Data.text)
 
 			case *slack.PresenceChangeEvent:
 				//fmt.Printf("Presence Change: %v\n", ev)
@@ -90,10 +90,10 @@ func (t *SlackRecvTrigger) Start() error {
 				//fmt.Printf("Current latency: %v\n", ev.Value)
 
 			case *slack.RTMError:
-				flogolog.Debugf("Error: %s\n", ev.Error())
+				fmt.Printf("Error: %s\n", ev.Error())
 
 			case *slack.InvalidAuthEvent:
-				flogolog.Debugf("Invalid credentials")
+				fmt.Printf("Invalid credentials")
 				return nil
 
 			default:
