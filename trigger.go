@@ -123,8 +123,8 @@ func (t *SlackRecvTrigger) Stop() error {
 }
 
 //GetChannelID returns channel ID for channel name
-func(t * SlackRecvTrigger) GetChannelID(accesstoken string , channel string) {
-	api_var := slack.New(accesstoken)
+func(t * SlackRecvTrigger) GetChannelID(accessToken string , channelName string) (string) {
+	api_var := slack.New(accessToken)
 	channels, err := api_var.GetChannels(false)
 	if err != nil {
 		fmt.Printf("%s\n", err)
@@ -132,7 +132,7 @@ func(t * SlackRecvTrigger) GetChannelID(accesstoken string , channel string) {
 	}
 	for _, channel := range channels {
 		fmt.Println("Channel :  %v", channel)
-		if channel.Name == channel {
+		if channel.Name == channelName {
 			fmt.Println("Found Channel:", channel.Name)
 			return channel.ID
 		}
