@@ -55,10 +55,12 @@ func (t *SlackRecvTrigger) Start() error {
 	flogolog.Debug("Processing handlers")
 	for _, handler := range handlers {
 
+		channel := handler.GetStringSetting("Channel")
 		accessToken := handler.GetStringSetting("AccessToken")
 		//accessToken := t.config.GetSetting("AccessToken")
 		//flogolog.Debug("AccessToken: ", accessToken)
 		api := slack.New(accessToken)
+		channelid := t.GetChannelID(accessToken, channel)
 		logger := log.New(os.Stdout, "slack-bot: ", log.Lshortfile|log.LstdFlags)
 		slack.SetLogger(logger)
 		api.SetDebug(true)
@@ -83,7 +85,9 @@ func (t *SlackRecvTrigger) Start() error {
 
 			case *slack.MessageEvent:
 				fmt.Printf("Message: %v\n", ev)
-				t.RunHandler(handler, ev.Text)
+				if channelid == ev.Channel {
+					t.RunHandler(handler, ev.Text)
+				}
 
 			case *slack.PresenceChangeEvent:
 				//fmt.Printf("Presence Change: %v\n", ev)
@@ -115,6 +119,24 @@ func (t *SlackRecvTrigger) Stop() error {
 	
 	fmt.Printf("Stopping RTM...")
 
+	return nil
+}
+
+//GetChannelID returns channel ID for channel name
+func(t * SlackRecvTrigger) GetChannelID(accesstoken string , channel string) {
+	api_var := slack.New(accesstoken)
+	channels, err := api_var.GetChannels(false)
+	if err != nil {
+		fmt.Printf("%s\n", err)
+		return
+	}
+	for _, channel := range channels {
+		fmt.Println("Channel :  %v", channel)
+		if channel.Name == channel {
+			fmt.Println("Found Channel:", channel.Name)
+			return channel.ID
+		}
+	}
 	return nil
 }
 
