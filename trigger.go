@@ -128,7 +128,7 @@ func(t * SlackRecvTrigger) GetChannelID(accessToken string , channelName string)
 	channels, err := api_var.GetChannels(false)
 	if err != nil {
 		fmt.Printf("%s\n", err)
-		return
+		return ""
 	}
 	for _, channel := range channels {
 		fmt.Println("Channel :  %v", channel)
@@ -137,7 +137,7 @@ func(t * SlackRecvTrigger) GetChannelID(accessToken string , channelName string)
 			return channel.ID
 		}
 	}
-	return nil
+	return ""
 }
 
 // RunHandler action on new Slack RTM message
