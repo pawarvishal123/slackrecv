@@ -65,3 +65,6 @@ Provide access token and channel name to receive message from slack channel via 
     }
 }
 ```
+
+## Third Party Library
+Slack API in Go - [https://github.com/nlopes/slack](https://github.com/nlopes/slack)
